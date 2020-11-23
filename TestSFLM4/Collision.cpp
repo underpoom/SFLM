@@ -11,7 +11,7 @@ Collision::~Collision()
 {
 
 }
-bool Collision::CheckCollision(Collision other, float push)
+bool Collision::CheckCollision(Collision other, sf::Vector2f& direction, float push)
 {
 	Vector2f otherPosition = other.GetPosition();
 	Vector2f otherHalfSize = other.GetHalfSize();
@@ -34,24 +34,37 @@ bool Collision::CheckCollision(Collision other, float push)
 			{
 				Move(intersectX * (1.0f - push), 0.0f);
 				other.Move(-intersectX * push, 0.0f);
+
+				direction.x = 1.0f;
+				direction.y = 0.0f;
 			}
 			else
 			{
 				Move(-intersectX * (1.0f - push), 0.0f);
 				other.Move(intersectX * push, 0.0f);
+
+				direction.x = -1.0f;
+				direction.y = 0.0f;
+
 			}
 		}
 		else
 		{
 			if (deltaY > 0.0f)
 			{
-				Move(0.0f,intersectY * (1.0f - push));
+				Move(0.0f, intersectY * (1.0f - push));
 				other.Move(0.0f, -intersectY * push);
+
+				direction.x = 0.0f;
+				direction.y = 1.0f;
 			}
 			else
 			{
 				Move(-0.0f, intersectY * (1.0f - push));
 				other.Move(0.0f, intersectY * push);
+
+				direction.x = 0.0f;
+				direction.y = -1.0f;
 			}
 		}
 		return true;

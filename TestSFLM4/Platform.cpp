@@ -1,11 +1,15 @@
 #include "Platform.h"
 using namespace sf;
-Platform::Platform(Texture* texture, Vector2f size, Vector2f position)
+Platform::Platform(Texture* texture, Vector2f size, Vector2f position,Color color)
 {
 	body.setSize(size);
 	body.setOrigin(size/2.0f);
 	body.setTexture(texture);
 	body.setPosition(position);
+	
+	
+	body.setFillColor(color);
+	//body.loadFromFile("image/tux_from_linux.png");
 
 }
 Platform::~Platform()

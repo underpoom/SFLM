@@ -26,11 +26,15 @@
     <ClCompile Include="Platform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="background.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Platform.h" />
+    <ClInclude Include="background.h" />
   </ItemGroup>
 </Project>
