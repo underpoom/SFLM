@@ -1,4 +1,3 @@
-
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <windows.h>
@@ -7,128 +6,316 @@
 #include "Platform.h"
 #include "background.h"
 #include <vector>
-static const float VIEW_HEIGHT = 512.0f;
 using namespace sf;
 using namespace std;
 void ResizeView(const RenderWindow& window, View& view)
 {
+    static const float VIEW_HEIGHT = 512.0f;
     float aspectRatio = float(window.getSize().x) / float(window.getSize().y);
     view.setSize(VIEW_HEIGHT * aspectRatio, VIEW_HEIGHT);
 }
-
 int main()
 {
-
-    sf::RenderWindow window(sf::VideoMode(1400, 700), "SFML Tutorial", Style::Close | Style::Resize);
+    RenderWindow window(sf::VideoMode(1400, 700), "SFML Tutorial", Style::Close | Style::Resize);
     View view(Vector2f(0.0f, 0.0f), Vector2f(1000.f * 1.4, 500.f * 1.4));
-
     Texture playerTexture;
     playerTexture.loadFromFile("image/tux_from_linux.png");
-    Player player(&playerTexture, Vector2u(3, 9), 0.3f, 300.0f, 200.0f);
+    Player player(&playerTexture, Vector2u(3, 9), 0.3f, 250.0f, 180.0f);
+    Event event;
 
-    RectangleShape box(Vector2f(50.0f, 50.0f));
-    box.setPosition(200.0f, 200.00f);
-    Texture boxtexture;
-    boxtexture.loadFromFile("image/box1.png");
-    box.setTexture(&boxtexture);
-
-    vector<Platform> platforms;
-    float _del = 10;
-    platforms.push_back(Platform(&boxtexture, Vector2f(300.0f, 20.0f), Vector2f(0.0f, 775.0f - _del), Color::White));
-    platforms.push_back(Platform(&boxtexture, Vector2f(200.0f, 20.0f), Vector2f(0.0f + 200, 775.0f - 150), Color::Green));
-    platforms.push_back(Platform(&boxtexture, Vector2f(200.0f, 20.0f), Vector2f(0.0f - 200, 775.0f - 150 * 2), Color::Blue));
-    platforms.push_back(Platform(&boxtexture, Vector2f(200.0f, 20.0f), Vector2f(0.0f + 200, 775.0f - 150 * 3), Color::White));
-    platforms.push_back(Platform(&boxtexture, Vector2f(200.0f, 20.0f), Vector2f(0.0f + 500, 775.0f - 150 * 2 + 50), Color::Blue));
-    platforms.push_back(Platform(&boxtexture, Vector2f(50.0f, 50.0f), Vector2f(200.0f + 25, 200.0f + 25), Color::Blue));
-
-    RectangleShape enemy(Vector2f(312.0f / 2, 413.0f / 2));
-    Texture enemyTexture;
-    enemyTexture.loadFromFile("image/hugeyeti3.png");
-    enemy.setTexture(&enemyTexture);
-
-    RectangleShape bg(Vector2f(1000.0f * 2, 700.0f * 2));
-    Texture bgTexture;
-    bgTexture.loadFromFile("image/gbg.png");
-    bg.setTexture(&bgTexture);
-    bg.setPosition(-700.0f, -340.0f);
-
-    vector<RectangleShape> backg;
-    backg.push_back(enemy);
-
-    RectangleShape bg2(Vector2f(1000.0f * 2, 700.0f * 2));
-    Texture bg2Texture;
-    bg2Texture.loadFromFile("image/gbgf.png");
-    bg2.setTexture(&bg2Texture);
-    bg2.setPosition(-2700.0f, -340.0f);
-
-    vector<background> _bg;
-    _bg.push_back(background(Vector2f(2000.0f, 1400.0f), String("image/gbg.png"), Vector2f(-700.0f, -500.0f)));
-
-    float deltaTime = 1.0f;
     Clock clock;
+    float deltaTime = 1.0;
 
-    float enemyy = 400.0f, enemyx = -300.0f;
-    enemy.setPosition(enemyx, enemyy);
+    RectangleShape background[10], enemy[10];
+    Texture backgroundTexture[10], enemyTexture[10], platformsTexture[10];
+    vector<Platform> platforms;
 
+    int numbackground = 2;
+    float enemyy = 400.0, enemyx = -300.0;
+    // background
+    {
+        backgroundTexture[0].loadFromFile("image/gbg.png");
+        backgroundTexture[1].loadFromFile("image/gbgf.png");
+        for (int i = 0; i < numbackground; i++)
+        {
+            background[i].setSize(Vector2f(900.0f*2 , 500.0f*2 ));
+            background[i].setTexture(&backgroundTexture[i % 2]);
+            background[i].setPosition(-700.0f + i * 2000.0, 0.0f);
+        }
+    }
+    // platformsTexture file
+    {
+        platformsTexture[0].loadFromFile("image/1_1.psd"); 
+        platformsTexture[1].loadFromFile("image/1_2.psd"); 
+        platformsTexture[2].loadFromFile("image/1_3.psd"); 
+        platformsTexture[3].loadFromFile("image/1_4.psd"); 
+        platformsTexture[4].loadFromFile("image/2_1.psd"); 
+        platformsTexture[5].loadFromFile("image/2_2.psd"); 
+        platformsTexture[6].loadFromFile("image/2_3.psd"); 
+        platformsTexture[7].loadFromFile("image/3_1.psd"); 
+        platformsTexture[8].loadFromFile("image/4_1.psd"); 
+
+
+        platformsTexture[30].loadFromFile("image/obj/pipe22.PNG");
+        platformsTexture[31].loadFromFile("image/obj/pipe32.PNG");
+        platformsTexture[32].loadFromFile("image/obj/pipe42.PNG");
+
+        platformsTexture[33].loadFromFile("image/obj/qs.PNG");
+        platformsTexture[34].loadFromFile("image/obj/hb11.PNG");
+        platformsTexture[35].loadFromFile("image/obj/hb81.PNG");
+        platformsTexture[36].loadFromFile("image/obj/hb31.PNG");
+        platformsTexture[37].loadFromFile("image/obj/hbcoin.PNG");
+
+        platformsTexture[160].loadFromFile("image/obj/floor1.PNG");
+        platformsTexture[161].loadFromFile("image/obj/floor2.PNG");
+        platformsTexture[162].loadFromFile("image/obj/floor3.PNG");
+
+
+
+
+
+
+
+    }
+    
+    // all platforms 
+    {
+        float bx = 35.0;
+        float h = 775.0;                            //lenght-height 
+        platforms.push_back(Platform(&platformsTexture[160], Vector2f(bx * 69 , bx * 2), Vector2f(0.0f + ((69/2)*35), h)));
+        platforms.push_back(Platform(&platformsTexture[30], Vector2f(bx * 2 ,  bx * 2), Vector2f(bx*29, h-bx*2))); //pipe
+        platforms.push_back(Platform(&platformsTexture[31], Vector2f(bx * 2 ,  bx * 3), Vector2f(bx*39, h-bx*2.5)));  //pipe
+        platforms.push_back(Platform(&platformsTexture[32], Vector2f(bx * 2 ,  bx * 4), Vector2f(bx * 47, h - bx*3)));  //pipe
+        platforms.push_back(Platform(&platformsTexture[32], Vector2f(bx * 2 ,  bx * 4), Vector2f(bx * 58, h - bx * 3))); //pipe
+
+
+        platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 21  , h - bx*5))); //ladd
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 22  , h - bx * 5))); //qs
+        platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 23, h - bx * 5))); //ladd
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 24, h - bx * 5))); //qs
+        platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 25, h - bx * 5))); //ladd
+        
+
+
+
+
+
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 17, h - bx * 5))); //qs1
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 23, h - bx * 10))); //qs2
+
+        platforms.push_back(Platform(&platformsTexture[161], Vector2f(bx * 15, bx * 2), Vector2f(bx*80, h)));
+        platforms.push_back(Platform(&platformsTexture[162], Vector2f(bx * 67, bx * 2), Vector2f(bx * 93+68/2*bx , h)));
+
+        platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 83, h - bx * 5))); //ladd
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 84, h - bx * 5))); //ladd
+        platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 85, h - bx * 5))); //ladd
+
+
+
+
+        platforms.push_back(Platform(&platformsTexture[35], Vector2f(bx * 8, bx * 1), Vector2f(bx * 89, h - bx * 10))); //ladd
+
+        platforms.push_back(Platform(&platformsTexture[36], Vector2f(bx * 3, bx * 1), Vector2f(bx * 100, h - bx * 10))); //ladd
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 102, h - bx * 10))); //qs1
+
+        platforms.push_back(Platform(&platformsTexture[37], Vector2f(bx * 1, bx * 1), Vector2f(bx * 102, h - bx * 5))); //qs1
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 2, bx * 1), Vector2f(bx * 108, h - bx * 5))); //ladd
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 114, h - bx * 5))); //qs1
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 117, h - bx * 5))); //qs1
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 117, h - bx * 10))); //qs1
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 120, h - bx * 5))); //qs1
+        
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 3, bx * 1), Vector2f(bx * 129, h - bx * 10))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 126, h - bx * 5))); //hb
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 136, h - bx * 10))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 137, h - bx * 10))); //qs
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 138, h - bx * 10))); //qs
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 139, h - bx * 10))); //hb
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 2, bx * 1), Vector2f(bx * 137, h - bx * 5))); //hb
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 142, h-bx*1.5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 2), Vector2f(bx * 143, h-bx*2))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 3), Vector2f(bx * 144, h - bx * 2.5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 145, h - bx * 3))); //hb
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 148, h - bx * 3))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 3), Vector2f(bx * 149, h - bx * 2.5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 2), Vector2f(bx * 150, h - bx * 2))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 151, h - bx * 1.5))); //hb
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 156, h - bx * 1.5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 2), Vector2f(bx * 157, h - bx * 2))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 3), Vector2f(bx * 158, h - bx * 2.5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 159, h - bx * 3))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 160, h - bx * 3))); //hb
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 67, bx * 2), Vector2f(bx * 164 + 67 / 2 * bx, h)));
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 164, h - bx * 3))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 3), Vector2f(bx * 165, h - bx * 2.5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 2), Vector2f(bx * 166, h - bx * 2))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 167, h - bx * 1.5))); //hb
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 2, bx * 2), Vector2f(bx * 172, h - bx * 2))); //pipe
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 2, bx * 1), Vector2f(bx * 177+bx*0.5, h - bx * 5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 179, h - bx * 5))); //qs
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 180, h - bx * 5))); //hb
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 2, bx * 2), Vector2f(bx * 188, h - bx * 2))); //pipe
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 190, h - bx * 1.5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 2), Vector2f(bx * 191, h - bx * 2))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 3), Vector2f(bx * 192, h - bx * 2.5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 193, h - bx * 3))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 5), Vector2f(bx * 194, h - bx * 3.5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 6), Vector2f(bx * 195, h - bx * 4))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 7), Vector2f(bx * 196, h - bx * 4.5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 8), Vector2f(bx * 197, h - bx * 5))); //hb
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 8), Vector2f(bx * 198, h - bx * 5))); //hb
+
+        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 207, h - bx * 1.5))); //hb final
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+       
+    }
+    // enemy
+    {
+       // enemy[0].setSize(Vector2f(312.0f / 2, 413.0f / 2));
+       // enemyTexture[0].loadFromFile("image/hugeyeti3.png");
+       // enemy[0].setTexture(&enemyTexture[0]);
+    }
+    // menu
+    Texture playTexture;
+    RectangleShape play(Vector2f(200.0f, 100.0f));
+    playTexture.loadFromFile("image/play1.PNG");
+    play.setTexture(&playTexture);
+
+    int state = 1;
     while (window.isOpen())
     {
 
-        Vector2f pos = player.GetPosition();
-        float speed_enemy = 0.2f;
-        enemyy += (pos.y > (enemyy + 140)) * speed_enemy - (pos.y <= (enemyy + 140)) * speed_enemy;
-        enemyx += (pos.x > (enemyx + 200)) * speed_enemy - (pos.x <= (enemyx + 200)) * speed_enemy;
-        enemy.setPosition(enemyx, enemyy);
-
-        deltaTime = clock.restart().asSeconds();
-        if (deltaTime > 1.0f / 20.0f)
-            deltaTime = 1.0f / 20.0f;
-        player.Update(deltaTime);
-        sf::Event event;
-        while (window.pollEvent(event))
+        if (state == 0)
         {
-            switch (event.type)
+            play.setPosition((player.GetPosition().x), (player.GetPosition().y));
+            window.draw(play);
+            window.setView(view);
+            window.display();
+            window.clear(Color(150, 150, 150));
+           
+           
+            
+
+            while (window.pollEvent(event))
             {
-            case Event::Closed:
-                window.close();
-                break;
-            case Event::Resized:
-                ResizeView(window, view);
-                break;
+                switch (event.type)
+                {
+                case Event::Closed:
+                    window.close();
+                    break;
+                case Event::Resized:
+                    ResizeView(window, view);
+                    break;
+                }
             }
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left) )
+            {
+                
+                state = 1;
+            }
+
+
+
+
         }
 
-        printf("%.0f %.0f %.0f %.0f\n", pos.x, pos.y, enemyx, enemyy);
-        view.setCenter(player.GetPosition());
-        window.clear(Color(150, 150, 150));
-        window.setView(view);
-
-        cout << " " << player.GetPosition().x << " ";
-
-        int v = 0;
-        //if (player.GetPosition().x > 80)
-        //   v = 0;
-        // else v = 5;
-
-        sf::Vector2f direction;
-        for (int i = 0; i < platforms.size() - v; i++)
+        else if (state == 1)
         {
-            if (platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0f))
-                player.OnCollistion(direction);
-            platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0f);
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+            {
+
+                state = 0;
+            }
+
+            // enemy setting
+            {
+                Vector2f pos = player.GetPosition();
+                float speed_enemy = 0.1f;
+                enemyy += (pos.y > (enemyy + 140)) * speed_enemy - (pos.y <= (enemyy + 140)) * speed_enemy;
+                enemyx += (pos.x > (enemyx + 200)) * speed_enemy - (pos.x <= (enemyx + 200)) * speed_enemy;
+                enemy[0].setPosition(enemyx, enemyy);
+                printf("player = %.0f %.0f %.0f %.0f %.0f\n", player.GetPosition().x, pos.y, enemyx, enemyy);
+            }
+            // deltaTime
+            {
+                deltaTime = clock.restart().asSeconds();
+                if (deltaTime > 1.0f / 20.0f)
+                    deltaTime = 1.0f / 20.0f;
+                player.Update(deltaTime);
+            }
+            // closed
+            while (window.pollEvent(event))
+            {
+                switch (event.type)
+                {
+                case Event::Closed:
+                    window.close();
+                    break;
+                case Event::Resized:
+                    ResizeView(window, view);
+                    break;
+                }
+            }
+            //Center&View
+            {
+                view.setCenter(player.GetPosition());
+                window.clear(Color(150, 150, 150));
+                window.setView(view);
+            }
+            for (int i = 0; i < numbackground; i++)
+            {
+                window.draw(background[i]);
+            }
+            for (int i = 0; i < platforms.size(); i++)
+            {
+                Vector2f direction;
+                if (platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0))
+                    player.OnCollistion(direction);
+                platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0);
+                platforms[i].Draw(window);
+            }
+            //window.draw(enemy[0]);
+            player.Draw(window);
+            window.display();
         }
-
-        window.draw(bg);
-        window.draw(bg2);
-
-        player.Draw(window);
-
-        for (int i = 0; i < platforms.size() - v; i++)
-        {
-            platforms[i].Draw(window);
-        }
-
-        window.draw(box);
-        window.draw(enemy);
-        window.display();
     }
+    
+
 }

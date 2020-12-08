@@ -5,7 +5,7 @@ using namespace sf;
 class Platform
 {
 public:
-	Platform(Texture* texture, Vector2f size, Vector2f position,Color color);
+	Platform(Texture* texture, Vector2f size, Vector2f position);
 	~Platform();
 	void Draw(RenderWindow& window);
 	Collision GetCollision() { return Collision(body); }

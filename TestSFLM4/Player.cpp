@@ -8,7 +8,7 @@ animation(texture , imageCount , switchTime)
 	row = 0;
 	faceRight = true;
 
-	body.setSize(Vector2f(100.0*0.8f, 150.0*0.8f));
+	body.setSize(Vector2f(100.0*0.55f, 150.0*0.55f));
 	body.setOrigin(body.getSize() / 2.0f);
 	body.setPosition(0.0f, 200.0f);
 	body.setTexture(texture);
