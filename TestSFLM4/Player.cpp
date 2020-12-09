@@ -10,7 +10,7 @@ animation(texture , imageCount , switchTime)
 
 	body.setSize(Vector2f(100.0*0.55f, 150.0*0.55f));
 	body.setOrigin(body.getSize() / 2.0f);
-	body.setPosition(0.0f, 200.0f);
+	body.setPosition(3500.0f, 699-300.0f);
 	body.setTexture(texture);
 
 }

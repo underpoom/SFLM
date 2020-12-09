@@ -65,10 +65,26 @@ int main()
         platformsTexture[35].loadFromFile("image/obj/hb81.PNG");
         platformsTexture[36].loadFromFile("image/obj/hb31.PNG");
         platformsTexture[37].loadFromFile("image/obj/hbcoin.PNG");
+        platformsTexture[38].loadFromFile("image/obj/hbstar.PNG");
+        platformsTexture[39].loadFromFile("image/obj/hb21.PNG");
+        platformsTexture[40].loadFromFile("image/obj/hbstair11.PNG");
+        platformsTexture[41].loadFromFile("image/obj/hbstair12.PNG");
+        platformsTexture[42].loadFromFile("image/obj/hbstair13.PNG");
+        platformsTexture[43].loadFromFile("image/obj/hbstair14.PNG");
+        platformsTexture[44].loadFromFile("image/obj/hbstair15.PNG");
+        platformsTexture[45].loadFromFile("image/obj/hbstair16.PNG");
+        platformsTexture[46].loadFromFile("image/obj/hbstair17.PNG");
+        platformsTexture[47].loadFromFile("image/obj/hbstair18.PNG");
+
+
+
+
+
 
         platformsTexture[160].loadFromFile("image/obj/floor1.PNG");
         platformsTexture[161].loadFromFile("image/obj/floor2.PNG");
         platformsTexture[162].loadFromFile("image/obj/floor3.PNG");
+        platformsTexture[163].loadFromFile("image/obj/floor4.PNG");
 
 
 
@@ -120,65 +136,68 @@ int main()
 
         platforms.push_back(Platform(&platformsTexture[37], Vector2f(bx * 1, bx * 1), Vector2f(bx * 102, h - bx * 5))); //qs1
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 2, bx * 1), Vector2f(bx * 108, h - bx * 5))); //ladd
+        platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 108, h - bx * 5))); //hb
+        platforms.push_back(Platform(&platformsTexture[38], Vector2f(bx * 1, bx * 1), Vector2f(bx * 109, h - bx * 5))); //hbstar
+       
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 114, h - bx * 5))); //qs1
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 117, h - bx * 5))); //qs1
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 117, h - bx * 10))); //qs1
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 120, h - bx * 5))); //qs1
+
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 114, h - bx * 5))); //qs1
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 117, h - bx * 5))); //qs1
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 117, h - bx * 10))); //qs1
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 120, h - bx * 5))); //qs1
         
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 3, bx * 1), Vector2f(bx * 129, h - bx * 10))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 126, h - bx * 5))); //hb
+        platforms.push_back(Platform(&platformsTexture[36], Vector2f(bx * 3, bx * 1), Vector2f(bx * 129, h - bx * 10))); //hb
+        platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 126, h - bx * 5))); //hb
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 136, h - bx * 10))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 137, h - bx * 10))); //qs
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 138, h - bx * 10))); //qs
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 139, h - bx * 10))); //hb
+        platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 136, h - bx * 10))); //hb
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 137, h - bx * 10))); //qs
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 138, h - bx * 10))); //qs
+        platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 139, h - bx * 10))); //hb
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 2, bx * 1), Vector2f(bx * 137, h - bx * 5))); //hb
+        platforms.push_back(Platform(&platformsTexture[39], Vector2f(bx * 2, bx * 1), Vector2f(bx * 137, h - bx * 5))); //hb
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 142, h-bx*1.5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 2), Vector2f(bx * 143, h-bx*2))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 3), Vector2f(bx * 144, h - bx * 2.5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 145, h - bx * 3))); //hb
+        platforms.push_back(Platform(&platformsTexture[40], Vector2f(bx * 1, bx * 1), Vector2f(bx * 142, h-bx*1.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[41], Vector2f(bx * 1, bx * 2), Vector2f(bx * 143, h-bx*2))); //hb
+        platforms.push_back(Platform(&platformsTexture[42], Vector2f(bx * 1, bx * 3), Vector2f(bx * 144, h - bx * 2.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[43], Vector2f(bx * 1, bx * 4), Vector2f(bx * 145, h - bx * 3))); //hb
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 148, h - bx * 3))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 3), Vector2f(bx * 149, h - bx * 2.5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 2), Vector2f(bx * 150, h - bx * 2))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 151, h - bx * 1.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[43], Vector2f(bx * 1, bx * 4), Vector2f(bx * 148, h - bx * 3))); //hb
+        platforms.push_back(Platform(&platformsTexture[42], Vector2f(bx * 1, bx * 3), Vector2f(bx * 149, h - bx * 2.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[41], Vector2f(bx * 1, bx * 2), Vector2f(bx * 150, h - bx * 2))); //hb
+        platforms.push_back(Platform(&platformsTexture[40], Vector2f(bx * 1, bx * 1), Vector2f(bx * 151, h - bx * 1.5))); //hb
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 156, h - bx * 1.5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 2), Vector2f(bx * 157, h - bx * 2))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 3), Vector2f(bx * 158, h - bx * 2.5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 159, h - bx * 3))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 160, h - bx * 3))); //hb
+        platforms.push_back(Platform(&platformsTexture[40], Vector2f(bx * 1, bx * 1), Vector2f(bx * 156, h - bx * 1.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[41], Vector2f(bx * 1, bx * 2), Vector2f(bx * 157, h - bx * 2))); //hb
+        platforms.push_back(Platform(&platformsTexture[42], Vector2f(bx * 1, bx * 3), Vector2f(bx * 158, h - bx * 2.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[43], Vector2f(bx * 1, bx * 4), Vector2f(bx * 159, h - bx * 3))); //hb
+        platforms.push_back(Platform(&platformsTexture[43], Vector2f(bx * 1, bx * 4), Vector2f(bx * 160, h - bx * 3))); //hb
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 67, bx * 2), Vector2f(bx * 164 + 67 / 2 * bx, h)));
+        platforms.push_back(Platform(&platformsTexture[163], Vector2f(bx * 67, bx * 2), Vector2f(bx * 164 + 67 / 2 * bx, h)));
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 164, h - bx * 3))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 3), Vector2f(bx * 165, h - bx * 2.5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 2), Vector2f(bx * 166, h - bx * 2))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 167, h - bx * 1.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[43], Vector2f(bx * 1, bx * 4), Vector2f(bx * 164, h - bx * 3))); //hb
+        platforms.push_back(Platform(&platformsTexture[42], Vector2f(bx * 1, bx * 3), Vector2f(bx * 165, h - bx * 2.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[41], Vector2f(bx * 1, bx * 2), Vector2f(bx * 166, h - bx * 2))); //hb
+        platforms.push_back(Platform(&platformsTexture[40], Vector2f(bx * 1, bx * 1), Vector2f(bx * 167, h - bx * 1.5))); //hb
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 2, bx * 2), Vector2f(bx * 172, h - bx * 2))); //pipe
+        platforms.push_back(Platform(&platformsTexture[30], Vector2f(bx * 2, bx * 2), Vector2f(bx * 172, h - bx * 2))); //pipe
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 2, bx * 1), Vector2f(bx * 177+bx*0.5, h - bx * 5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 179, h - bx * 5))); //qs
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 180, h - bx * 5))); //hb
+        platforms.push_back(Platform(&platformsTexture[39], Vector2f(bx * 2, bx * 1), Vector2f(bx * 177+bx*0.5, h - bx * 5))); //hb
+        platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 179, h - bx * 5))); //qs
+        platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 180, h - bx * 5))); //hb
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 2, bx * 2), Vector2f(bx * 188, h - bx * 2))); //pipe
+        platforms.push_back(Platform(&platformsTexture[30], Vector2f(bx * 2, bx * 2), Vector2f(bx * 188, h - bx * 2))); //pipe
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 190, h - bx * 1.5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 2), Vector2f(bx * 191, h - bx * 2))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 3), Vector2f(bx * 192, h - bx * 2.5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 4), Vector2f(bx * 193, h - bx * 3))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 5), Vector2f(bx * 194, h - bx * 3.5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 6), Vector2f(bx * 195, h - bx * 4))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 7), Vector2f(bx * 196, h - bx * 4.5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 8), Vector2f(bx * 197, h - bx * 5))); //hb
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 8), Vector2f(bx * 198, h - bx * 5))); //hb
+        platforms.push_back(Platform(&platformsTexture[40], Vector2f(bx * 1, bx * 1), Vector2f(bx * 190, h - bx * 1.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[41], Vector2f(bx * 1, bx * 2), Vector2f(bx * 191, h - bx * 2))); //hb
+        platforms.push_back(Platform(&platformsTexture[42], Vector2f(bx * 1, bx * 3), Vector2f(bx * 192, h - bx * 2.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[43], Vector2f(bx * 1, bx * 4), Vector2f(bx * 193, h - bx * 3))); //hb
+        platforms.push_back(Platform(&platformsTexture[44], Vector2f(bx * 1, bx * 5), Vector2f(bx * 194, h - bx * 3.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[45], Vector2f(bx * 1, bx * 6), Vector2f(bx * 195, h - bx * 4))); //hb
+        platforms.push_back(Platform(&platformsTexture[46], Vector2f(bx * 1, bx * 7), Vector2f(bx * 196, h - bx * 4.5))); //hb
+        platforms.push_back(Platform(&platformsTexture[47], Vector2f(bx * 1, bx * 8), Vector2f(bx * 197, h - bx * 5))); //hb
+        platforms.push_back(Platform(&platformsTexture[47], Vector2f(bx * 1, bx * 8), Vector2f(bx * 198, h - bx * 5))); //hb
 
-        platforms.push_back(Platform(nullptr, Vector2f(bx * 1, bx * 1), Vector2f(bx * 207, h - bx * 1.5))); //hb final
+        platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 207, h - bx * 1.5))); //hb final
        
 
 
@@ -212,22 +231,55 @@ int main()
        // enemy[0].setTexture(&enemyTexture[0]);
     }
     // menu
-    Texture playTexture;
-    RectangleShape play(Vector2f(200.0f, 100.0f));
-    playTexture.loadFromFile("image/play1.PNG");
-    play.setTexture(&playTexture);
+    
 
-    int state = 1;
+    Texture btnplayTexture,backTexture;
+    RectangleShape btnplay(Vector2f(1300.0f/3, 300.0f/3));
+    RectangleShape sbtnplay(Vector2f(1300.0f / 3*1.2, 300.0f / 3*1.2));
+
+    RectangleShape back(Vector2f(1400.0f , 700.0f ));
+
+    btnplayTexture.loadFromFile("image/menu/btnstart.PNG");
+
+    backTexture.loadFromFile("image/menu/back.jpg");
+
+    btnplay.setTexture(&btnplayTexture);
+    sbtnplay.setTexture(&btnplayTexture);
+    back.setTexture(&backTexture);
+
+    
+
+    int state = 0;
     while (window.isOpen())
     {
+        
 
         if (state == 0)
         {
-            play.setPosition((player.GetPosition().x), (player.GetPosition().y));
-            window.draw(play);
-            window.setView(view);
-            window.display();
+            printf("player = %.0f %.0f %.0f %.0f %.0f ", player.GetPosition().x, player.GetPosition().y, enemyx, enemyy);
+            btnplay.setPosition(player.GetPosition().x, player.GetPosition().y-300);
+            sbtnplay.setPosition(player.GetPosition().x-10, player.GetPosition().y - 310);
+
+            Vector2i mouse = Mouse::getPosition(window);
+            printf("mousepos x= %.0f y= %.0f\n", (float)mouse.x, (float)mouse.y);
+
+
+
+
+            back.setPosition(player.GetPosition().x - 700, player.GetPosition().y - 350);
+           
             window.clear(Color(150, 150, 150));
+            view.setCenter(player.GetPosition());
+            window.setView(view);
+
+            window.draw(back);
+            if (mouse.x > 738 and mouse.x < 1080 and mouse.y>64 and mouse.y < 130)
+                window.draw(sbtnplay);
+            else 
+            window.draw(btnplay);
+         
+            window.display();
+            
            
            
             
@@ -247,6 +299,7 @@ int main()
 
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left) )
             {
+                if(mouse.x>738 and mouse.x<1080 and mouse.y>64 and mouse.y<130)
                 
                 state = 1;
             }

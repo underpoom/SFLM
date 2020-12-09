@@ -6,6 +6,9 @@ Platform::Platform(Texture* texture, Vector2f size, Vector2f position)
 	body.setOrigin(size/2.0f);
 	body.setTexture(texture);
 	body.setPosition(position);
+
+	
+
 	
 	
 	//body.setFillColor();
