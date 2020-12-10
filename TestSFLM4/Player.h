@@ -11,6 +11,7 @@ public :
 	void Update(float deltaTime);
 	void Draw(RenderWindow& window);
 	void OnCollistion(sf::Vector2f direction);
+
 	void SetPosition(float  possetx, float possety);
 	
 

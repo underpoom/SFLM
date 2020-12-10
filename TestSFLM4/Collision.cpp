@@ -22,7 +22,7 @@ bool Collision::CheckCollision(Collision other, sf::Vector2f& direction, float p
 	float deltaY = otherPosition.y - thisPosition.y;
 
 	float intersectX = abs(deltaX) - (otherHalfSize.x + thisHalfSize.x);
-	float intersectY = abs(deltaY) - (otherHalfSize.y + thisHalfSize.y);
+	float intersectY = abs(deltaY) - (otherHalfSize.y + thisHalfSize.y ) ;
 
 	if (intersectX < 0.0f && intersectY < 0.0f)
 	{
@@ -86,7 +86,7 @@ bool Collision::CheckCollisionm1(Collision other, sf::Vector2f& direction)
 	float intersectX = abs(deltaX) - (otherHalfSize.x + thisHalfSize.x);
 	float intersectY = abs(deltaY) - (otherHalfSize.y + thisHalfSize.y);
 
-	if (intersectX < 0.0f && intersectY < 0.0f)
+	if (intersectX < -30.0f && intersectY < -35.0f)
 	{
 		printf("coll\n");
 		
@@ -96,4 +96,29 @@ bool Collision::CheckCollisionm1(Collision other, sf::Vector2f& direction)
 
 	return false;
 }
+
+bool Collision::CheckCollisionm2(Collision other, sf::Vector2f& direction)
+{
+	Vector2f otherPosition = other.GetPosition();
+	Vector2f otherHalfSize = other.GetHalfSize();
+	Vector2f thisPosition = GetPosition();
+	Vector2f thisHalfSize = GetHalfSize();
+
+	float deltaX = otherPosition.x - thisPosition.x;
+	float deltaY = otherPosition.y - thisPosition.y;
+
+	float intersectX = abs(deltaX) - (otherHalfSize.x + thisHalfSize.x);
+	float intersectY = abs(deltaY) - (otherHalfSize.y + thisHalfSize.y);
+
+	if (intersectX < -10.0f && intersectY < 0.0f)
+	{
+		printf("coll\n");
+
+		return true;
+	}
+
+
+	return false;
+}
+
 

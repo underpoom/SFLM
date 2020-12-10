@@ -76,11 +76,11 @@ void Player::OnCollistion(sf::Vector2f direction)
 	else if (direction.x > 0.0f) {
 		v.x = 0.0f;
 	}
-	if (direction.y < 0.0f) {
+	if (direction.y < 0.0f ) {
 		v.y = 0.0f;
 		canJump = true;
 	}
-	else if (direction.y > 0.0f) {
+	else if (direction.y > 0.0f ) {
 		v.y = 0.0f;
 	}
 }

@@ -29,7 +29,13 @@
     <ClCompile Include="background.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="monsterfly.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="monster1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monstertop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -40,5 +46,7 @@
     <ClInclude Include="Platform.h" />
     <ClInclude Include="background.h" />
     <ClInclude Include="monster1.h" />
+    <ClInclude Include="monsterfly.h" />
+    <ClInclude Include="monstertop.h" />
   </ItemGroup>
 </Project>

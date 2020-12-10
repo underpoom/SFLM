@@ -7,6 +7,8 @@
 #include "Platform.h"
 #include "background.h"
 #include "monster1.h";
+#include "monstertop.h";
+#include "monsterfly.h";
 #include <vector>
 #include<stdio.h>
 #include<utility>
@@ -76,12 +78,30 @@ int main()
     View view(Vector2f(0.0f, 0.0f), Vector2f(1000.f * 1.4, 500.f * 1.4));
     Texture playerTexture;
     playerTexture.loadFromFile("image/tux_from_linux.png");
-    Player player(&playerTexture, Vector2u(3, 9), 0.3f, 250.0f, 180.0f);
+    Player player(&playerTexture, Vector2u(3, 9), 0.3f, 200.0f, 180.0f);
 
     //sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed,Vector2f pos
-    Texture monsterTexture;
+    Texture monsterTexture, monsterTexture2 , monsterTexture3, monsterTexture4 , monsterTexture5, monsterTexture6;
+    Texture monsterTexture7, monsterTexture8;
     monsterTexture.loadFromFile("image/monster/ms01.PNG");
-    monster1 monster(&monsterTexture, Vector2u(1, 1), 0.3f, 250.0f , Vector2f(500.0f , 500.0f));
+    monsterTexture2.loadFromFile("image/monster/ghost.PNG");
+    monsterTexture3.loadFromFile("image/monster/ms03.PNG");
+    monsterTexture4.loadFromFile("image/monster/ms04.PNG");
+    monsterTexture5.loadFromFile("image/monster/ms05.PNG");
+    monsterTexture6.loadFromFile("image/monster/ms06.PNG");
+    monsterTexture7.loadFromFile("image/monster/ms07.PNG");
+    monsterTexture8.loadFromFile("image/monster/ms08.PNG");
+
+
+    monster1 monster(&monsterTexture, Vector2u(1, 1), 0.3f, 250.0f , Vector2f(500.0f , 699.0f -20));
+    monsterfly monster2(&monsterTexture2, Vector2u(1, 1), 0.3f, 250.0f, Vector2f(1840.0f, 699.0f - 20));
+    monster1 monster3(&monsterTexture3, Vector2u(1, 1), 0.3f, 250.0f, Vector2f(1078, 699.0f - 20));
+    monstertop monster4(&monsterTexture4, Vector2u(1, 1), 0.3f, 250.0f, Vector2f(3000, 360.0f -10 ));
+    monster1 monster5(&monsterTexture5, Vector2u(1, 1), 0.3f, 150.0f, Vector2f(2760.0f, 699.0f - 20));
+    monster1 monster6(&monsterTexture6, Vector2u(1, 1), 0.3f, 700.0f, Vector2f(3500.0f, 699.0f - 20));
+    monster1 monster7(&monsterTexture7, Vector2u(1, 1), 0.3f, 400.0f, Vector2f(4600.0f, 699.0f - 20));
+    monster1 monster8(&monsterTexture8, Vector2u(1, 1), 0.3f, 300.0f, Vector2f(6200.0f, 699.0f - 20));
+    
 
    
     Event event;
@@ -244,7 +264,7 @@ int main()
             platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 179, h - bx * 5))); //qs
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 180, h - bx * 5))); //hb
 
-            platforms.push_back(Platform(&platformsTexture[30], Vector2f(bx * 2, bx * 2), Vector2f(bx * 188, h - bx * 2))); //pipe
+            platforms.push_back(Platform(&platformsTexture[30], Vector2f(bx * 2, bx * 2), Vector2f(bx * 186, h - bx * 2))); //pipe
 
             platforms.push_back(Platform(&platformsTexture[40], Vector2f(bx * 1, bx * 1), Vector2f(bx * 190, h - bx * 1.5))); //hb
             platforms.push_back(Platform(&platformsTexture[41], Vector2f(bx * 1, bx * 2), Vector2f(bx * 191, h - bx * 2))); //hb
@@ -551,7 +571,7 @@ int main()
             if (Keyboard::isKeyPressed(Keyboard::Key::V) and vjumpstate ==0)
             {
                 vjump++;
-                player.SetPosition(1000.0f + vjump*100, 500.0f);
+                player.SetPosition(1000.0f + vjump*300, 500.0f);
                 vjumpstate = 1;
             }
 
@@ -559,22 +579,110 @@ int main()
             {
                 vjumpstate = 0;
             }
+            Vector2f direction;
 
-                
+           
 
-            monster.Updatem1(deltaTime, 200.0, 500.0);
-            monster.Draw(window);
-            
+
+
+            // update monster
+            {
+                monster.Updatem1(deltaTime * 0.8, 360.0, 930.0);
+                monster.Draw(window);
+
+                monster2.Updatem1(deltaTime * 0.8, 380, 700);
+                monster2.Draw(window);
+
+                monster3.Updatem1(deltaTime * 0.8, 1078 - 20, 1303 - 20);
+                monster3.Draw(window);
+
+                monster4.Updatem1(deltaTime * 0.8, 3000 - 20, 3230 - 20);
+                monster4.Draw(window);
+
+                monster5.Updatem1(deltaTime * 0.8, 2560 - 20, 3030 - 20);
+                monster5.Draw(window);
+
+                monster6.Updatem1(deltaTime * 0.8, 3300 - 20, 4400 - 20);
+                monster6.Draw(window);
+
+                monster7.Updatem1(deltaTime * 0.8, 4460 - 50, 4925 - 40);
+                monster7.Draw(window);
+
+                monster8.Updatem1(deltaTime * 0.8, 6083 - 30, 6518 - 95);
+                monster8.Draw(window);
+            }
+           
             // platforms
-
             for (int i = 0; i < platforms.size(); i++)
             {
-                Vector2f direction;
+                
                 if (platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0))
                     player.OnCollistion(direction);
                 platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0);
+                
+                platforms[i].Draw(window);
+            }
+            // obj
+            for(int i=0;i<10;i++)
+            {
+                window.draw(obj[i]);
+
+            }
+            // window.draw(enemy[0]);
+            
+            // fall down
+            {
+                btngameover.setPosition(player.GetPosition().x + 320 - 720, player.GetPosition().y - 230-100+10);
+                btnplayagain.setPosition(player.GetPosition().x +180  -85, player.GetPosition().y +150 -20);
+                sbtnplayagain.setPosition(player.GetPosition().x + 180 - 85-25, player.GetPosition().y + 150 - 20-15);
+
+                Vector2i mouse = Mouse::getPosition(window);
+                printf(" mousepos x= %.0f y= %.0f ", (float)mouse.x, (float)mouse.y);
+
+                // fall down
+                if (player.GetPosition().y>890)
+                {
+                    
+                    {
+                        if (mouse.x > 803 and mouse.x < 1081 and mouse.y>490 and mouse.y < 635)
+                            window.draw(sbtnplayagain);
+                        else
+                            window.draw(btnplayagain);
+
+                        if (mouse.x > 803 and mouse.x < 1081 and mouse.y>490 and mouse.y < 635)
+                            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                            {
+                                goto start;
+                                state = 1;
+                            }
+
+                            player.fallen = 1;
+                        window.draw(btngameover);
+                       
+                    }
+
+                }
+            }
+            // monster collision
+            {
                 if (monster.GetCollider().CheckCollisionm1(player.GetCollision(), direction))
                     on = 1;
+                if (monster2.GetCollider().CheckCollisionm2(player.GetCollision(), direction))
+                    on = 1;
+                if (monster3.GetCollider().CheckCollisionm1(player.GetCollision(), direction))
+                    on = 1;
+                if (monster4.GetCollider().CheckCollisionm1(player.GetCollision(), direction))
+                    on = 1;
+                if (monster5.GetCollider().CheckCollisionm1(player.GetCollision(), direction))
+                    on = 1;
+                if (monster6.GetCollider().CheckCollisionm1(player.GetCollision(), direction))
+                    on = 1;
+                if (monster7.GetCollider().CheckCollisionm1(player.GetCollision(), direction))
+                    on = 1;
+                if (monster8.GetCollider().CheckCollisionm1(player.GetCollision(), direction))
+                    on = 1;
+            }
+
                 if(on == 1)
                 {
                     btngameover.setPosition(player.GetPosition().x + 320 - 720, player.GetPosition().y - 230 - 100 + 10);
@@ -603,50 +711,6 @@ int main()
                     }
 
                 }
-                platforms[i].Draw(window);
-            }
-            // obj
-            for(int i=0;i<10;i++)
-            {
-                window.draw(obj[i]);
-
-            }
-            // window.draw(enemy[0]);
-            
-            // fall down
-            {
-                btngameover.setPosition(player.GetPosition().x + 320 - 720, player.GetPosition().y - 230-100+10);
-                btnplayagain.setPosition(player.GetPosition().x +180  -85, player.GetPosition().y +150 -20);
-                sbtnplayagain.setPosition(player.GetPosition().x + 180 - 85-25, player.GetPosition().y + 150 - 20-15);
-
-                Vector2i mouse = Mouse::getPosition(window);
-                printf(" mousepos x= %.0f y= %.0f ", (float)mouse.x, (float)mouse.y);
-
-
-                if (player.GetPosition().y>890)
-                {
-                    
-                    {
-                        if (mouse.x > 803 and mouse.x < 1081 and mouse.y>490 and mouse.y < 635)
-                            window.draw(sbtnplayagain);
-                        else
-                            window.draw(btnplayagain);
-
-                        if (mouse.x > 803 and mouse.x < 1081 and mouse.y>490 and mouse.y < 635)
-                            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-                            {
-                                goto start;
-                                state = 1;
-                            }
-
-                            player.fallen = 1;
-                        window.draw(btngameover);
-                       
-                    }
-
-                }
-            }
-
             
             window.display();
         }
