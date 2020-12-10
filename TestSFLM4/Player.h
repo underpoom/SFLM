@@ -14,6 +14,8 @@ public :
 
 	Vector2f GetPosition(){return body.getPosition();}
 	Collision GetCollision() { return Collision(body); }
+
+	bool fallen ;
 	
 	
 
@@ -29,5 +31,6 @@ private:
 	bool canJump;
 	float jumpHeight;
 
+	
 };
 

@@ -1,5 +1,5 @@
 #include "Collision.h"
-
+#include <iostream>
 using namespace sf;
 
 Collision::Collision(RectangleShape& body) :
@@ -26,7 +26,8 @@ bool Collision::CheckCollision(Collision other, sf::Vector2f& direction, float p
 
 	if (intersectX < 0.0f && intersectY < 0.0f)
 	{
-		push = std::min(std::max(push, 0.0f), 1.0f);
+
+		
 
 		if (intersectX > intersectY)
 		{
