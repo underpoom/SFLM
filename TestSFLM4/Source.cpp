@@ -6,6 +6,7 @@
 #include "PLayer.h"
 #include "Platform.h"
 #include "background.h"
+#include "monster1.h";
 #include <vector>
 #include<stdio.h>
 #include<utility>
@@ -36,6 +37,7 @@ void showHighScore(int x, int y, string word, sf::RenderWindow& window, sf::Font
 }
 
 
+
 int main()
 {
 
@@ -58,8 +60,8 @@ int main()
         //cout << temp << " " << score;
     }
     ///////////////////----------------------------
-    name[5] = "kklk";
-    score[5] = 1234;
+    name[5] = "teeee";
+    score[5] = 5;
     ///////////////////----------------------------
     userScore.push_back(make_pair(score[5], name[5]));
     sort(userScore.begin(), userScore.end());
@@ -75,6 +77,13 @@ int main()
     Texture playerTexture;
     playerTexture.loadFromFile("image/tux_from_linux.png");
     Player player(&playerTexture, Vector2u(3, 9), 0.3f, 250.0f, 180.0f);
+
+    //sf::Texture* texture, sf::Vector2u imageCount, float switchTime, float speed,Vector2f pos
+    Texture monsterTexture;
+    monsterTexture.loadFromFile("image/monster/ms01.PNG");
+    monster1 monster(&monsterTexture, Vector2u(1, 1), 0.3f, 250.0f , Vector2f(500.0f , 500.0f));
+
+   
     Event event;
     Clock clock;
     float deltaTime = 1.0;
@@ -94,7 +103,7 @@ int main()
         {
             background[i].setSize(Vector2f(2880.0f /1.3 , 2065.0f/1.3 ));
             background[i].setTexture(&backgroundTexture[i % 2]);
-            background[i].setPosition(-700.0f + i * 2210.0, -500.0f +200);
+            background[i].setPosition(-1200.0f + i * 2210.0, -500.0f +200);
         }
     }
     //other obj
@@ -327,6 +336,10 @@ int main()
     }
      
     player.fallen = 0;
+    bool on = 0;
+
+    int vjump = 0;
+    int vjumpstate = 0;
          
     while (window.isOpen())
     {
@@ -533,13 +546,63 @@ int main()
             {
                 window.draw(background[i]);
             }
+            player.Draw(window);
+
+            if (Keyboard::isKeyPressed(Keyboard::Key::V) and vjumpstate ==0)
+            {
+                vjump++;
+                player.SetPosition(1000.0f + vjump*100, 500.0f);
+                vjumpstate = 1;
+            }
+
+            if (!Keyboard::isKeyPressed(Keyboard::Key::V))
+            {
+                vjumpstate = 0;
+            }
+
+                
+
+            monster.Updatem1(deltaTime, 200.0, 500.0);
+            monster.Draw(window);
+            
             // platforms
+
             for (int i = 0; i < platforms.size(); i++)
             {
                 Vector2f direction;
                 if (platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0))
                     player.OnCollistion(direction);
                 platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0);
+                if (monster.GetCollider().CheckCollisionm1(player.GetCollision(), direction))
+                    on = 1;
+                if(on == 1)
+                {
+                    btngameover.setPosition(player.GetPosition().x + 320 - 720, player.GetPosition().y - 230 - 100 + 10);
+                    btnplayagain.setPosition(player.GetPosition().x + 180 - 85, player.GetPosition().y + 150 - 20);
+                    sbtnplayagain.setPosition(player.GetPosition().x + 180 - 85 - 25, player.GetPosition().y + 150 - 20 - 15);
+
+                    Vector2i mouse = Mouse::getPosition(window);
+                    printf(" mousepos x= %.0f y= %.0f ", (float)mouse.x, (float)mouse.y);
+
+                    {
+                        if (mouse.x > 803 and mouse.x < 1081 and mouse.y>490 and mouse.y < 635)
+                            window.draw(sbtnplayagain);
+                        else
+                            window.draw(btnplayagain);
+
+                        if (mouse.x > 803 and mouse.x < 1081 and mouse.y>490 and mouse.y < 635)
+                            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                            {
+                                goto start;
+                                state = 1;
+                            }
+
+                        player.fallen = 1;
+                        window.draw(btngameover);
+
+                    }
+
+                }
                 platforms[i].Draw(window);
             }
             // obj
@@ -549,7 +612,7 @@ int main()
 
             }
             // window.draw(enemy[0]);
-            player.Draw(window);
+            
             // fall down
             {
                 btngameover.setPosition(player.GetPosition().x + 320 - 720, player.GetPosition().y - 230-100+10);

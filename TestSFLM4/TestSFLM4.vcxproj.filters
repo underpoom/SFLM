@@ -29,6 +29,9 @@
     <ClCompile Include="background.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="monster1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -36,5 +39,6 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="background.h" />
+    <ClInclude Include="monster1.h" />
   </ItemGroup>
 </Project>

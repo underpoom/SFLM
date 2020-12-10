@@ -84,3 +84,7 @@ void Player::OnCollistion(sf::Vector2f direction)
 		v.y = 0.0f;
 	}
 }
+void Player::SetPosition(float  possetx, float possety)
+{
+	body.setPosition(possetx, possety);
+}
