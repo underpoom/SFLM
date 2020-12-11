@@ -37,6 +37,40 @@ void showHighScore(int x, int y, string word, sf::RenderWindow& window, sf::Font
         window.draw(text);
     
 }
+int mins=0, secs=0;
+void showTime(int x, int y, float mills, sf::RenderWindow& window, sf::Font* font)
+{
+ 
+        mills = int(mills);
+
+        
+        secs = (int(mills) / 100) % 60;
+        mins = (int(mills) /100)/60%60;
+   
+       
+        
+    
+    mills = int(mills) % 100;
+    int mills2 = int(mills);
+
+    String _secs, _mins;
+    if (secs < 10)_secs = "0";
+        else _secs = "";
+    if (mins < 10)_mins = "0";
+    else _mins = "";
+
+    
+    String word = _mins + to_string(mins) + ":" + _secs + to_string(secs) + ":" + to_string(mills2);
+    
+
+    sf::Text text;
+    text.setFont(*font);
+    text.setPosition(x, y);
+    text.setString(word);
+    text.setCharacterSize(80);
+    
+    window.draw(text);
+}
 
 
 
@@ -354,15 +388,25 @@ int main()
 
        
     }
+    
      
     player.fallen = 0;
     bool on = 0;
 
     int vjump = 0;
     int vjumpstate = 0;
+
+    Clock Cclock;
+    Time micro = microseconds(10000);
+    Time milli = microseconds(10);
+    Time second = seconds(0.01f);
+
+    int mins=0, secons=0, mills=0;
+
          
     while (window.isOpen())
     {
+        
         // highscore
         if(state == -1)
         {
@@ -383,6 +427,7 @@ int main()
                 fprintf(fp, "%s %d\n", temp, userScore[i].first);
             }
             fclose(fp);
+            
             
 
             window.clear();
@@ -521,6 +566,8 @@ int main()
         // game play
         else if (state == 1)
         {  
+        
+            // Exit
             if (Keyboard::isKeyPressed(Keyboard::Key::Escape))
             {     
                 state = 0;
@@ -567,24 +614,20 @@ int main()
                 window.draw(background[i]);
             }
             player.Draw(window);
-
-            if (Keyboard::isKeyPressed(Keyboard::Key::V) and vjumpstate ==0)
+            // Warp
             {
-                vjump++;
-                player.SetPosition(1000.0f + vjump*300, 500.0f);
-                vjumpstate = 1;
+                if (Keyboard::isKeyPressed(Keyboard::Key::V) and vjumpstate == 0)
+                {
+                    vjump++;
+                    player.SetPosition(1000.0f + vjump * 300, 500.0f);
+                    vjumpstate = 1;
+                }
+                if (!Keyboard::isKeyPressed(Keyboard::Key::V))
+                {
+                    vjumpstate = 0;
+                }
             }
-
-            if (!Keyboard::isKeyPressed(Keyboard::Key::V))
-            {
-                vjumpstate = 0;
-            }
-            Vector2f direction;
-
-           
-
-
-
+            Vector2f direction;     
             // update monster
             {
                 monster.Updatem1(deltaTime * 0.8, 360.0, 930.0);
@@ -611,24 +654,41 @@ int main()
                 monster8.Updatem1(deltaTime * 0.8, 6083 - 30, 6518 - 95);
                 monster8.Draw(window);
             }
-           
+          
+
             // platforms
             for (int i = 0; i < platforms.size(); i++)
             {
                 
-                if (platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0))
-                    player.OnCollistion(direction);
-                platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0);
-                
-                platforms[i].Draw(window);
-            }
-            // obj
-            for(int i=0;i<10;i++)
-            {
-                window.draw(obj[i]);
+                    if (platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0))
+                        player.OnCollistion(direction);
+                    platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0);
 
+
+
+
+                    {
+                    
+                    if (platforms[10].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0f) == 1)
+                   // on = 1;
+                    {
+
+                    }
+
+                    }
+
+                    platforms[i].Draw(window);
+                
             }
-            // window.draw(enemy[0]);
+           
+           
+
+           
+           
+            //player.OnCollistion(direction);
+            
+             platforms[10].Draw(window);
+            
             
             // fall down
             {
@@ -663,6 +723,18 @@ int main()
 
                 }
             }
+            // show time
+            {
+
+                Time elapsed = Cclock.getElapsedTime();
+                cout << elapsed.asSeconds();
+
+                mills = int(elapsed.asSeconds() * 100);
+                showTime(player.GetPosition().x + 360, player.GetPosition().y - 300, mills, window, &font);
+            }
+
+           
+
             // monster collision
             {
                 if (monster.GetCollider().CheckCollisionm1(player.GetCollision(), direction))

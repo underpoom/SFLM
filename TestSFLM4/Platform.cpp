@@ -7,13 +7,6 @@ Platform::Platform(Texture* texture, Vector2f size, Vector2f position)
 	body.setTexture(texture);
 	body.setPosition(position);
 
-	
-
-	
-	
-	//body.setFillColor();
-	//body.loadFromFile("image/tux_from_linux.png");
-
 }
 Platform::~Platform()
 {
