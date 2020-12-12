@@ -38,6 +38,12 @@
     <ClCompile Include="monstertop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="chest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Textbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -48,5 +54,7 @@
     <ClInclude Include="monster1.h" />
     <ClInclude Include="monsterfly.h" />
     <ClInclude Include="monstertop.h" />
+    <ClInclude Include="chest.h" />
+    <ClInclude Include="Textbox.h" />
   </ItemGroup>
 </Project>

@@ -1,14 +1,17 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <windows.h>
 #include "Animation.h"
+#include "Textbox.h"
 #include "PLayer.h"
 #include "Platform.h"
 #include "background.h"
 #include "monster1.h";
 #include "monstertop.h";
 #include "monsterfly.h";
+#include "chest.h";
 #include <vector>
 #include<stdio.h>
 #include<utility>
@@ -40,42 +43,43 @@ void showHighScore(int x, int y, string word, sf::RenderWindow& window, sf::Font
 int mins=0, secs=0;
 void showTime(int x, int y, float mills, sf::RenderWindow& window, sf::Font* font)
 {
- 
         mills = int(mills);
-
-        
         secs = (int(mills) / 100) % 60;
         mins = (int(mills) /100)/60%60;
-   
-       
-        
-    
     mills = int(mills) % 100;
     int mills2 = int(mills);
-
     String _secs, _mins;
     if (secs < 10)_secs = "0";
         else _secs = "";
     if (mins < 10)_mins = "0";
-    else _mins = "";
-
-    
+    else _mins = ""; 
     String word = _mins + to_string(mins) + ":" + _secs + to_string(secs) + ":" + to_string(mills2);
-    
-
+   
     sf::Text text;
     text.setFont(*font);
     text.setPosition(x, y);
     text.setString(word);
-    text.setCharacterSize(80);
+    text.setCharacterSize(75);
+    
     
     window.draw(text);
 }
-
-
+void showcount(int x, int y, int count, sf::RenderWindow& window, sf::Font* font)
+{
+   
+    sf::Text text;
+    text.setFont(*font);
+    text.setPosition(x, y);
+    text.setString(to_string(count));
+    text.setCharacterSize(60);
+    text.setFillColor(Color::Black);
+    window.draw(text);
+}
 
 int main()
 {
+
+    
 
     Font font;
     char temp[255] = {};
@@ -96,16 +100,16 @@ int main()
         //cout << temp << " " << score;
     }
     ///////////////////----------------------------
-    name[5] = "teeee";
-    score[5] = 5;
+    name[5] = "kkkokkkkk";
+    score[5] = 12356;
     ///////////////////----------------------------
     userScore.push_back(make_pair(score[5], name[5]));
     sort(userScore.begin(), userScore.end());
     fclose(fp);
     }
 
-    // start game
     int state = 0;
+    // start game
     start:;
 
     RenderWindow window(sf::VideoMode(1400, 700), "Escapue!", Style::Close | Style::Resize);
@@ -126,18 +130,17 @@ int main()
     monsterTexture7.loadFromFile("image/monster/ms07.PNG");
     monsterTexture8.loadFromFile("image/monster/ms08.PNG");
 
-
     monster1 monster(&monsterTexture, Vector2u(1, 1), 0.3f, 250.0f , Vector2f(500.0f , 699.0f -20));
-    monsterfly monster2(&monsterTexture2, Vector2u(1, 1), 0.3f, 250.0f, Vector2f(1840.0f, 699.0f - 20));
+    monsterfly monster2(&monsterTexture2, Vector2u(1, 1), 0.3f, 250.0f, Vector2f(1740.0f, 699.0f - 20));
     monster1 monster3(&monsterTexture3, Vector2u(1, 1), 0.3f, 250.0f, Vector2f(1078, 699.0f - 20));
     monstertop monster4(&monsterTexture4, Vector2u(1, 1), 0.3f, 250.0f, Vector2f(3000, 360.0f -10 ));
     monster1 monster5(&monsterTexture5, Vector2u(1, 1), 0.3f, 150.0f, Vector2f(2760.0f, 699.0f - 20));
     monster1 monster6(&monsterTexture6, Vector2u(1, 1), 0.3f, 700.0f, Vector2f(3500.0f, 699.0f - 20));
     monster1 monster7(&monsterTexture7, Vector2u(1, 1), 0.3f, 400.0f, Vector2f(4600.0f, 699.0f - 20));
     monster1 monster8(&monsterTexture8, Vector2u(1, 1), 0.3f, 300.0f, Vector2f(6200.0f, 699.0f - 20));
-    
+    monsterfly monster9(&monsterTexture2, Vector2u(1, 1), 0.3f, 450.0f, Vector2f(1880.0f, 699.0f - 20));
 
-   
+    
     Event event;
     Clock clock;
     float deltaTime = 1.0;
@@ -148,7 +151,19 @@ int main()
     Texture objTexture[10];
 
     int numbackground = 10;
-    float enemyy = 400.0, enemyx = -300.0;
+    
+    sf::SoundBuffer buffer;
+   
+    if (!buffer.loadFromFile("soundeffect/ES_Game Show - Liru.ogg"))
+    {
+        cout << "Error";
+    }
+    Sound sound;
+    sound.setBuffer(buffer);
+    
+
+
+
     // background 
     {
         backgroundTexture[0].loadFromFile("image/background/ice2.jpg");
@@ -219,7 +234,7 @@ int main()
     {
         float bx = 35.0;
         float h = 775.0;     
-        // main room
+        // platform main room
         {
             //lenght-height 
             platforms.push_back(Platform(&platformsTexture[160], Vector2f(bx * 69, bx * 2), Vector2f(0.0f + ((69 / 2) * 35), h)));
@@ -227,79 +242,45 @@ int main()
             platforms.push_back(Platform(&platformsTexture[31], Vector2f(bx * 2, bx * 3), Vector2f(bx * 39, h - bx * 2.5)));  //pipe
             platforms.push_back(Platform(&platformsTexture[32], Vector2f(bx * 2, bx * 4), Vector2f(bx * 47, h - bx * 3)));  //pipe
             platforms.push_back(Platform(&platformsTexture[32], Vector2f(bx * 2, bx * 4), Vector2f(bx * 58, h - bx * 3))); //pipe
-
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 21, h - bx * 5))); //ladd
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 22, h - bx * 5))); //qs
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 23, h - bx * 5))); //ladd
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 24, h - bx * 5))); //qs
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 25, h - bx * 5))); //ladd
-
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 17, h - bx * 5))); //qs1
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 23, h - bx * 10))); //qs2
-
             platforms.push_back(Platform(&platformsTexture[161], Vector2f(bx * 15, bx * 2), Vector2f(bx * 80, h)));
             platforms.push_back(Platform(&platformsTexture[162], Vector2f(bx * 67, bx * 2), Vector2f(bx * 93 + 68 / 2 * bx, h)));
-
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 83, h - bx * 5))); //ladd
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 84, h - bx * 5))); //ladd
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 85, h - bx * 5))); //ladd
-
             platforms.push_back(Platform(&platformsTexture[35], Vector2f(bx * 8, bx * 1), Vector2f(bx * 89, h - bx * 10))); //ladd
-
             platforms.push_back(Platform(&platformsTexture[36], Vector2f(bx * 3, bx * 1), Vector2f(bx * 100, h - bx * 10))); //ladd
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 102, h - bx * 10))); //qs1
-
             platforms.push_back(Platform(&platformsTexture[37], Vector2f(bx * 1, bx * 1), Vector2f(bx * 102, h - bx * 5))); //qs1
-
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 108, h - bx * 5))); //hb
             platforms.push_back(Platform(&platformsTexture[38], Vector2f(bx * 1, bx * 1), Vector2f(bx * 109, h - bx * 5))); //hbstar
-
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 114, h - bx * 5))); //qs1
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 117, h - bx * 5))); //qs1
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 117, h - bx * 10))); //qs1
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 120, h - bx * 5))); //qs1
-
             platforms.push_back(Platform(&platformsTexture[36], Vector2f(bx * 3, bx * 1), Vector2f(bx * 129, h - bx * 10))); //hb
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 126, h - bx * 5))); //hb
-
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 136, h - bx * 10))); //hb
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 137, h - bx * 10))); //qs
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 138, h - bx * 10))); //qs
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 139, h - bx * 10))); //hb
-
             platforms.push_back(Platform(&platformsTexture[39], Vector2f(bx * 2, bx * 1), Vector2f(bx * 137, h - bx * 5))); //hb
-
             platforms.push_back(Platform(&platformsTexture[40], Vector2f(bx * 1, bx * 1), Vector2f(bx * 142, h - bx * 1.5))); //hb
             platforms.push_back(Platform(&platformsTexture[41], Vector2f(bx * 1, bx * 2), Vector2f(bx * 143, h - bx * 2))); //hb
             platforms.push_back(Platform(&platformsTexture[42], Vector2f(bx * 1, bx * 3), Vector2f(bx * 144, h - bx * 2.5))); //hb
             platforms.push_back(Platform(&platformsTexture[43], Vector2f(bx * 1, bx * 4), Vector2f(bx * 145, h - bx * 3))); //hb
-
             platforms.push_back(Platform(&platformsTexture[43], Vector2f(bx * 1, bx * 4), Vector2f(bx * 148, h - bx * 3))); //hb
             platforms.push_back(Platform(&platformsTexture[42], Vector2f(bx * 1, bx * 3), Vector2f(bx * 149, h - bx * 2.5))); //hb
             platforms.push_back(Platform(&platformsTexture[41], Vector2f(bx * 1, bx * 2), Vector2f(bx * 150, h - bx * 2))); //hb
             platforms.push_back(Platform(&platformsTexture[40], Vector2f(bx * 1, bx * 1), Vector2f(bx * 151, h - bx * 1.5))); //hb
-
             platforms.push_back(Platform(&platformsTexture[40], Vector2f(bx * 1, bx * 1), Vector2f(bx * 156, h - bx * 1.5))); //hb
             platforms.push_back(Platform(&platformsTexture[41], Vector2f(bx * 1, bx * 2), Vector2f(bx * 157, h - bx * 2))); //hb
             platforms.push_back(Platform(&platformsTexture[42], Vector2f(bx * 1, bx * 3), Vector2f(bx * 158, h - bx * 2.5))); //hb
             platforms.push_back(Platform(&platformsTexture[43], Vector2f(bx * 1, bx * 4), Vector2f(bx * 159, h - bx * 3))); //hb
             platforms.push_back(Platform(&platformsTexture[43], Vector2f(bx * 1, bx * 4), Vector2f(bx * 160, h - bx * 3))); //hb
-
             platforms.push_back(Platform(&platformsTexture[163], Vector2f(bx * 67, bx * 2), Vector2f(bx * 164 + 67 / 2 * bx, h)));
-
             platforms.push_back(Platform(&platformsTexture[43], Vector2f(bx * 1, bx * 4), Vector2f(bx * 164, h - bx * 3))); //hb
             platforms.push_back(Platform(&platformsTexture[42], Vector2f(bx * 1, bx * 3), Vector2f(bx * 165, h - bx * 2.5))); //hb
             platforms.push_back(Platform(&platformsTexture[41], Vector2f(bx * 1, bx * 2), Vector2f(bx * 166, h - bx * 2))); //hb
             platforms.push_back(Platform(&platformsTexture[40], Vector2f(bx * 1, bx * 1), Vector2f(bx * 167, h - bx * 1.5))); //hb
-
-            platforms.push_back(Platform(&platformsTexture[30], Vector2f(bx * 2, bx * 2), Vector2f(bx * 172, h - bx * 2))); //pipe
-
+            
             platforms.push_back(Platform(&platformsTexture[39], Vector2f(bx * 2, bx * 1), Vector2f(bx * 177 + bx * 0.5, h - bx * 5))); //hb
-            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 179, h - bx * 5))); //qs
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 180, h - bx * 5))); //hb
-
-            platforms.push_back(Platform(&platformsTexture[30], Vector2f(bx * 2, bx * 2), Vector2f(bx * 186, h - bx * 2))); //pipe
-
+            
             platforms.push_back(Platform(&platformsTexture[40], Vector2f(bx * 1, bx * 1), Vector2f(bx * 190, h - bx * 1.5))); //hb
             platforms.push_back(Platform(&platformsTexture[41], Vector2f(bx * 1, bx * 2), Vector2f(bx * 191, h - bx * 2))); //hb
             platforms.push_back(Platform(&platformsTexture[42], Vector2f(bx * 1, bx * 3), Vector2f(bx * 192, h - bx * 2.5))); //hb
@@ -309,29 +290,38 @@ int main()
             platforms.push_back(Platform(&platformsTexture[46], Vector2f(bx * 1, bx * 7), Vector2f(bx * 196, h - bx * 4.5))); //hb
             platforms.push_back(Platform(&platformsTexture[47], Vector2f(bx * 1, bx * 8), Vector2f(bx * 197, h - bx * 5))); //hb
             platforms.push_back(Platform(&platformsTexture[47], Vector2f(bx * 1, bx * 8), Vector2f(bx * 198, h - bx * 5))); //hb
-
             platforms.push_back(Platform(&platformsTexture[34], Vector2f(bx * 1, bx * 1), Vector2f(bx * 207, h - bx * 1.5))); //hb final
 
-        }
-        // secret room
-        {
+            platforms.push_back(Platform(&platformsTexture[30], Vector2f(bx * 2, bx * 2), Vector2f(bx * 172, h - bx * 2))); //pipe
+            platforms.push_back(Platform(&platformsTexture[30], Vector2f(bx * 2, bx * 2), Vector2f(bx * 186, h - bx * 2))); //pipe
+
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 17, h - bx * 5))); //qs1    -1
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 22, h - bx * 5))); //qs     -2
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 23, h - bx * 10))); //qs2   -3
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 24, h - bx * 5))); //qs     -4
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 84, h - bx * 5))); //ladd   -5
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 102, h - bx * 10))); //qs1  -6
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 114, h - bx * 5))); //qs1    -7
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 117, h - bx * 5))); //qs1    -8
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 117, h - bx * 10))); //qs1   -9
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 120, h - bx * 5))); //qs1    -10
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 137, h - bx * 10))); //qs    -11
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 138, h - bx * 10))); //qs    -12
+            platforms.push_back(Platform(&platformsTexture[33], Vector2f(bx * 1, bx * 1), Vector2f(bx * 179, h - bx * 5))); //qs     -13
+
+
 
         }
+        
  
     }
-    // enemy
-    {
-       // enemy[0].setSize(Vector2f(312.0f / 2, 413.0f / 2));
-       // enemyTexture[0].loadFromFile("image/hugeyeti3.png");
-       // enemy[0].setTexture(&enemyTexture[0]);
-    }
+
+    
+    
     // menu icon
     Texture btnplayTexture,backTexture;
     Texture hsTexture,settingTexture,exitTexture,commingTexture,returnTexture,gameoverTexture,playagainTexture;
-
-
     RectangleShape back(Vector2f(1400.0f , 700.0f ));
-
     RectangleShape btnplay(Vector2f(1300.0f/3, 300.0f/3)) , sbtnplay(Vector2f(1300.0f / 3*1.2, 300.0f / 3*1.2));
     RectangleShape btnhs(Vector2f(369.0f , 97.0f )), sbtnhs(Vector2f(369.0f  * 1.2, 97.0f  * 1.2));
     RectangleShape btnsetting(Vector2f(540.0f /1.8, 322.0f/1.8 )), sbtnsetting(Vector2f(540.0f/1.8  * 1.2, 322.0f /1.8* 1.2));
@@ -340,11 +330,6 @@ int main()
     RectangleShape btnreturn(Vector2f(280.0/3.5 , 280.0/3.5 )),sbtnreturn(Vector2f(280.0 / 3.5 *1.2, 280.0 / 3.5 * 1.2));
     RectangleShape btngameover(Vector2f(804.0 /1, 422.0 / 1));
     RectangleShape btnplayagain(Vector2f(738.0 / 2.5, 419.0 / 2.5)), sbtnplayagain(Vector2f(738.0 / 2.5 * 1.2, 419.0 / 2.5 * 1.2));
-
-
-
-
- 
     // menu buttonTexture
     {
         backTexture.loadFromFile("image/menu/back.jpg");
@@ -380,7 +365,7 @@ int main()
         btnplayagain.setTexture(&playagainTexture);
         sbtnplayagain.setTexture(&playagainTexture);
 
-
+       
         
 
 
@@ -388,25 +373,87 @@ int main()
 
        
     }
-    
-     
     player.fallen = 0;
     bool on = 0;
 
     int vjump = 0;
     int vjumpstate = 0;
-
+    int mins = 0, secons = 0, mills = 0;
     Clock Cclock;
-    Time micro = microseconds(10000);
-    Time milli = microseconds(10);
-    Time second = seconds(0.01f);
 
-    int mins=0, secons=0, mills=0;
-
-         
-    while (window.isOpen())
+    int ichest[20] = {};
+    int ichestcol[20] = {};
+    srand(time(NULL));
+    Texture ChestTexture[10];
     {
+        ChestTexture[0].loadFromFile("image/chest&key/chest0.PNG");
+        ChestTexture[1].loadFromFile("image/chest&key/chest1.PNG");
+        ChestTexture[2].loadFromFile("image/chest&key/chest2.PNG");
+        ChestTexture[3].loadFromFile("image/chest&key/chest3.PNG");
+        ChestTexture[4].loadFromFile("image/chest&key/key0.PNG");
+        ChestTexture[5].loadFromFile("image/chest&key/key1.PNG");
+        ChestTexture[6].loadFromFile("image/chest&key/key2.PNG");
+        ChestTexture[7].loadFromFile("image/chest&key/key3.PNG");
+
+        ChestTexture[8].loadFromFile("image/chest&key/x.PNG");
+
+    }
+    RectangleShape icon;
+    icon.setSize(Vector2f(380.0/3, 436.0/3));
+    icon.setTexture(&ChestTexture[8]);
+    
         
+    Textbox playernametextbox(70, sf::Color::White, true);
+    playernametextbox.setFont(font);
+    playernametextbox.setPosition({ player.GetPosition().x - 500,player.GetPosition().y +100});
+    playernametextbox.setlimit(true, 10);
+
+
+    vector<chest> Chest;
+int _rand[20] = {};
+    // chest put
+    {
+        float bx = 35.0f;
+        float h = 775.0f;
+
+        
+        for (int i = 0; i < 14; i++)
+        {
+            _rand[i] = rand() % 8;
+        }
+
+        Chest.push_back(chest(&ChestTexture[_rand[0]], Vector2f(bx , bx ), Vector2f(bx * 17 , h - bx * 5 - bx + rand()%2*70 )));
+        Chest.push_back(chest(&ChestTexture[_rand[1]], Vector2f(bx, bx  ), Vector2f(bx * 22 , h - bx * 5 - bx + rand() % 2 * 70)));
+        Chest.push_back(chest(&ChestTexture[_rand[2]], Vector2f(bx, bx  ), Vector2f(bx * 23 , h - bx * 10 - bx + rand() % 2 * 70)));
+        Chest.push_back(chest(&ChestTexture[_rand[3]], Vector2f(bx, bx), Vector2f(bx * 24, h - bx * 5 - bx + rand() % 2 * 70)));
+        Chest.push_back(chest(&ChestTexture[_rand[4]], Vector2f(bx, bx), Vector2f(bx * 84, h - bx * 5 - bx + rand() % 2 * 70)));
+        Chest.push_back(chest(&ChestTexture[_rand[5]], Vector2f(bx, bx), Vector2f(bx * 102, h - bx * 10 - bx + rand() % 2 * 70)));
+        Chest.push_back(chest(&ChestTexture[_rand[6]], Vector2f(bx, bx), Vector2f(bx * 114, h - bx * 5 - bx + rand() % 2 * 70)));
+        Chest.push_back(chest(&ChestTexture[_rand[7]], Vector2f(bx, bx), Vector2f(bx * 117, h - bx * 5 - bx + rand() % 2 * 70)));
+        Chest.push_back(chest(&ChestTexture[_rand[8]], Vector2f(bx, bx), Vector2f(bx * 117, h - bx * 10 - bx + rand() % 2 * 70)));
+        Chest.push_back(chest(&ChestTexture[_rand[9]], Vector2f(bx, bx), Vector2f(bx * 120, h - bx * 5 - bx + rand() % 2 * 70)));
+        Chest.push_back(chest(&ChestTexture[_rand[10]], Vector2f(bx, bx), Vector2f(bx * 137, h - bx * 10 - bx + rand() % 2 * 70)));
+        Chest.push_back(chest(&ChestTexture[_rand[11]], Vector2f(bx, bx), Vector2f(bx * 138, h - bx * 10 - bx + rand() % 2 * 70)));
+        Chest.push_back(chest(&ChestTexture[_rand[12]], Vector2f(bx, bx), Vector2f(bx * 179, h - bx * 10 - bx + rand() % 2 * 70)));
+
+
+
+    }
+
+    Vector2f warp[10];
+    {
+        warp[0] = Vector2f(1016.0f, 450.0);
+        warp[1] = Vector2f(1360.0f, 417.0);
+        warp[2] = Vector2f(1650.0f, 382.0);
+        warp[3] = Vector2f(2032.0f, 386.0);
+    }
+
+    int countchest = 0 , countkey = 0;
+    int soundstate1 = 0;
+    int finalstate = 0;
+
+    while (window.isOpen())
+    {  
         // highscore
         if(state == -1)
         {
@@ -462,7 +509,7 @@ int main()
         // menu
         if (state == 0)
         {
-            printf("player = %.0f %.0f %.0f %.0f %.0f ", player.GetPosition().x, player.GetPosition().y, enemyx, enemyy);
+            
            
             // all button-------------------------------------------------------------------
             btnplay.setPosition(player.GetPosition().x, player.GetPosition().y-300);
@@ -533,8 +580,13 @@ int main()
                 if (Mouse::isButtonPressed(sf::Mouse::Left))
                     state = -1;
 
+            
+            
+            playernametextbox.drawTo(window);
+            
 
-
+          
+           
             window.display();
 
             
@@ -549,39 +601,55 @@ int main()
                 case Event::Resized:
                     ResizeView(window, view);
                     break;
+                case sf::Event::TextEntered:
+                    playernametextbox.typeOn(event);
+                
+                
                 }
             }
 
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left) )
             {
-                if(mouse.x>738 and mouse.x<1080 and mouse.y>64 and mouse.y<130)
-                
+                if (mouse.x > 738 and mouse.x < 1080 and mouse.y>64 and mouse.y < 130)
+                {
                     state = 1;
+                    Cclock.restart();
+                    
+                }
+                
+                    
             }
 
-
+           
 
 
         }
+         
         // game play
         else if (state == 1)
         {  
         
+
+        
+
+        
+            // sound play
+            {
+                if (soundstate1 == 0)
+                    sound.play();
+
+                if (soundstate1 == 0)
+                    soundstate1 = 1;
+                
+            }
+            
+            printf("player x=%.0f y=%.0f cchest=%d ckey=%d ", player.GetPosition().x, player.GetPosition().y,countchest,countkey);
             // Exit
             if (Keyboard::isKeyPressed(Keyboard::Key::Escape))
             {     
                 state = 0;
                 goto start;
-            }
-            // enemy setting
-            {
-                Vector2f pos = player.GetPosition();
-                float speed_enemy = 0.1f;
-                enemyy += (pos.y > (enemyy + 140)) * speed_enemy - (pos.y <= (enemyy + 140)) * speed_enemy;
-                enemyx += (pos.x > (enemyx + 200)) * speed_enemy - (pos.x <= (enemyx + 200)) * speed_enemy;
-                enemy[0].setPosition(enemyx, enemyy);
-                printf("player = %.0f %.0f %.0f %.0f %.0f\n", player.GetPosition().x, pos.y, enemyx, enemyy);
-            }
+            }          
             // deltaTime
             {
                 deltaTime = clock.restart().asSeconds();
@@ -600,6 +668,7 @@ int main()
                 case Event::Resized:
                     ResizeView(window, view);
                     break;
+                
                 }
             }
             // Center&View
@@ -613,7 +682,18 @@ int main()
             {
                 window.draw(background[i]);
             }
-            player.Draw(window);
+            // obj
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    window.draw(obj[i]);
+                        
+                }
+            }
+            
+            
+                player.Draw(window);
+            
             // Warp
             {
                 if (Keyboard::isKeyPressed(Keyboard::Key::V) and vjumpstate == 0)
@@ -653,43 +733,94 @@ int main()
 
                 monster8.Updatem1(deltaTime * 0.8, 6083 - 30, 6518 - 95);
                 monster8.Draw(window);
-            }
-          
 
-            // platforms
+                monster9.Updatem1(deltaTime * 0.8, 180, 700);
+                monster9.Draw(window);
+            }    
+            
+            // platforms & chest/key        
             for (int i = 0; i < platforms.size(); i++)
             {
+
                 
                     if (platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0))
                         player.OnCollistion(direction);
                     platforms[i].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0);
 
 
-
-
-                    {
                     
-                    if (platforms[10].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0f) == 1)
-                   // on = 1;
-                    {
+                    
+                        for(int j=54;j<54+13;j++)
+                        if (ichest[j-54]==0 and (platforms[j].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0f)))
+                        {
+                            ichest[j-54] = 1;
+                        }
 
-                    }
+                        if (platforms[53].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0f))
+                        {
+                            int r = rand() % 4;
+                            player.SetPosition(warp[r].x,warp[r].y);
+                        }
+                        if (platforms[52].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0f))
+                        {
+                            int r = rand() % 4;
+                            player.SetPosition(warp[r].x, warp[r].y);
+                        }
 
-                    }
+                        
+                        for (int k = 0; k < Chest.size(); k++)
+                        {
+
+                            if (ichest[k] != 0)
+                            {
+                                
+
+                                Chest[k].Draw(window);
+                            }
+                            if (ichest[k] == 1 and ichestcol[k] == 0 and (Chest[k].GetCollision().CheckCollision(player.GetCollision(), direction, 1.0f)))
+                                {
+                                    ichestcol[k] = 1;
+                                }
+
+
+
+                        }
+                        countchest = 0, countkey = 0;
+
+                        for (int l = 0; l < Chest.size(); l++)
+                        {
+                            if (ichestcol[l] == 1 and _rand[l] < 4)
+                                countchest++;
+                            if (ichestcol[l] == 1 and _rand[l] > 3)
+                                countkey++;
+
+                        }
+
+
+                   
+
+                    
 
                     platforms[i].Draw(window);
                 
             }
-           
-           
 
+
+            for (int i = 0; i < 15; i++)
+            {
+               
+                cout << ichest[i];
+            }
+            cout << " : ";
+            for (int i = 0; i < 15; i++)
+            {
+
+                cout << ichestcol[i];
+            }
+
+            cout << endl;
+            
            
-           
-            //player.OnCollistion(direction);
-            
-             platforms[10].Draw(window);
-            
-            
             // fall down
             {
                 btngameover.setPosition(player.GetPosition().x + 320 - 720, player.GetPosition().y - 230-100+10);
@@ -725,15 +856,19 @@ int main()
             }
             // show time
             {
-
-                Time elapsed = Cclock.getElapsedTime();
-                cout << elapsed.asSeconds();
-
+                Time elapsed = Cclock.getElapsedTime();    
+                
                 mills = int(elapsed.asSeconds() * 100);
                 showTime(player.GetPosition().x + 360, player.GetPosition().y - 300, mills, window, &font);
             }
+            // show icon
+            {
+                icon.setPosition(player.GetPosition().x -650, player.GetPosition().y - 300);
+                window.draw(icon);
 
-           
+                showcount(player.GetPosition().x -500 -10-3, player.GetPosition().y - 300-8 +5, countchest, window, &font);
+                showcount(player.GetPosition().x - 500 - 10-3, player.GetPosition().y - 300 - 8 +80 +5, countkey, window, &font);
+            }
 
             // monster collision
             {
@@ -752,6 +887,8 @@ int main()
                 if (monster7.GetCollider().CheckCollisionm1(player.GetCollision(), direction))
                     on = 1;
                 if (monster8.GetCollider().CheckCollisionm1(player.GetCollision(), direction))
+                    on = 1;
+                if (monster9.GetCollider().CheckCollisionm1(player.GetCollision(), direction))
                     on = 1;
             }
 
@@ -825,5 +962,8 @@ int main()
                 window.display();
             
         }
+       
+
+       
     }
 }
